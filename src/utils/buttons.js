@@ -1,6 +1,6 @@
 const buttons = [
     {
-        value: 'undo',
+        value: 'ON',
     },
     {
         value: '('
@@ -12,7 +12,7 @@ const buttons = [
         value: 'copy'
     },
     {
-        value: 'delete'
+        value: 'backspace'
     },
     {
         value: 'sin'
@@ -30,7 +30,7 @@ const buttons = [
         value: 'C'
     },
     {
-        value: 'backspace'
+        value: 'delete'
     },
     {
         value: '/'
@@ -48,7 +48,7 @@ const buttons = [
         backgroundColor: '#060606'
     },
     {
-        value: 'x'
+        value: '*'
     },
     {
         value: '4',
