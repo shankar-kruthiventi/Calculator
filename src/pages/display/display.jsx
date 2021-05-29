@@ -4,7 +4,8 @@ const Display = (props) => {
     return (
         <div className={classes.displayContainer}>
             <div className={classes.displayValue}>
-                {props.displayValue}
+                <div>{props.currentOperation}</div>
+                <div>{props.displayValue}</div>
             </div>
         </div>
 

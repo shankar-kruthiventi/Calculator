@@ -1,6 +1,6 @@
 const buttons = [
     {
-        value: 'ON',
+        value: 'undo',
     },
     {
         value: '('

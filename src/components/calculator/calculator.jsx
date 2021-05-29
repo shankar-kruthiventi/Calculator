@@ -11,6 +11,8 @@ class Calculator extends React.Component {
         super(props);
         this.state = {
             displayValue: '',
+            currentOperation: '',
+            operationHistory: [],
             timer: null
         }
     }
@@ -19,11 +21,11 @@ class Calculator extends React.Component {
         let timer = setInterval(() => {
             document.getElementById('display').focus();
         }, 400);
-        this.setState(state => { return {...state, timer}});
+        this.setState(state => { return { ...state, timer } });
     }
 
     componentWillUnmount() {
-        if(this.state.timer) {
+        if (this.state.timer) {
             clearInterval(this.state.timer);
         }
     }
@@ -34,7 +36,7 @@ class Calculator extends React.Component {
     }
 
     onEnter = (event) => {
-        if(event && event.keyCode === 13) {
+        if (event && event.keyCode === 13) {
             event.preventDefault();
             this.performOperation();
         }
@@ -42,25 +44,59 @@ class Calculator extends React.Component {
 
     performOperation = () => {
         const display = document.getElementById('display').value;
+        let operationHistory = [...this.state.operationHistory, display]
         let result = operations.performOperation(display);
         document.getElementById('display').value = result;
-        this.setState(state => { return { ...state, displayValue: result } });
+        this.setState(state => { return { ...state, displayValue: result, operationHistory, currentOperation: display } });
     }
 
+    copyToClipBoard = () => {
+        let copyText = document.getElementById("display");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+    }
+    undoKeyboardOperation = () => {
+        if (this.state.operationHistory.length === 0) {
+            this.setState(state => { return { ...state, currentOperation: '', displayValue: '' } });
+            return;
+        }
+
+        // to update to the last but one operation
+        if (this.state.operationHistory.length > 1) {
+            this.state.operationHistory.pop();
+        }
+        let lastOperation = this.state.operationHistory.pop();
+        document.getElementById('display').value = lastOperation;
+
+        // to update the displayValue for the lastOperation
+        let result = operations.performOperation(lastOperation);
+        document.getElementById('display').value = result;
+
+        this.setState(state => { return { ...state, displayValue: result, currentOperation: lastOperation } });
+    }
+
+    // to perform operations using keyboard
     keyBoardOperation = (key) => {
         let display = document.getElementById('display').value;
-        if(key === '=') {
+        if (key === '=') {
             this.performOperation();
-        } else if(key === 'copy') {
-            let copyText  = document.getElementById("display");
-            copyText.select();
-            copyText.setSelectionRange(0, 99999);          
-            document.execCommand("copy");
-        } else if(operations.specialOperands.indexOf(key) === -1) {
+        } else if (key === 'copy') {
+            this.copyToClipBoard();
+        } else if (key === 'undo') {
+            this.undoKeyboardOperation()
+        } else if (operations.specialOperands.indexOf(key) === -1) {
             document.getElementById('display').value = display + key;
             this.change();
         } else {
-            let result = operations.specialOperations(display,key)
+            if (key === 'CE') {
+                let operationHistory = [];
+                this.setState(state => { return { ...state, operationHistory, currentOperation: '' } });
+            }
+            if (key === 'C' && this.state.displayValue.length === 0) {
+                this.setState(state => { return { ...state, currentOperation: '' } });
+            }
+            let result = operations.specialOperations(display, key)
             document.getElementById('display').value = result;
             this.setState(state => { return { ...state, displayValue: result } });
         }
@@ -69,14 +105,14 @@ class Calculator extends React.Component {
     render() {
         return (
             <div className={classes.container}>
-                <input type="text" id="display" autoComplete="off" className={classes.hidden} onChange={() => this.change()} onKeyUp={(event) => this.onEnter(event)}/>
-                <Display displayValue={this.state.displayValue} />
+                <input type="text" id="display" autoComplete="off" className={classes.hidden} onChange={() => this.change()} onKeyUp={(event) => this.onEnter(event)} />
+                <Display displayValue={this.state.displayValue} currentOperation={this.state.currentOperation} />
                 <div className={classes.buttonsContainer}>
-                    {buttons.map(button => (<div key={button.value} className={classes.button} 
+                    {buttons.map(button => (<div key={button.value} className={classes.button}
                         style={{ backgroundColor: button.backgroundColor ? button.backgroundColor : 'rgb(43 41 41)' }}
                         onClick={() => this.keyBoardOperation(button.value)}
-                        >
-                            <Button button={button.value} />
+                    >
+                        <Button button={button.value} />
                     </div>))}
                 </div>
                 <Button />

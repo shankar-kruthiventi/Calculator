@@ -13,7 +13,7 @@ const performOperation = (value) => {
     }
 }
 
-const specialOperations = (value, key) => {
+const specialOperations = (value,key) => {
     if(key === 'CE') {
         return '';
     } else if(key === 'C') {
@@ -22,8 +22,6 @@ const specialOperations = (value, key) => {
         return value.slice(1,value.length);
     } else if(key === 'backspace') {
         return value.slice(0, value.length-1);
-    } else if(key === 'ON') {
-        return value;
     }
 }
 
