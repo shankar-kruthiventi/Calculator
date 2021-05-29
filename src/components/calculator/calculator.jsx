@@ -35,7 +35,6 @@ class Calculator extends React.Component {
 
     onEnter = (event) => {
         if(event && event.keyCode === 13) {
-            console.log('event');
             event.preventDefault();
             this.performOperation();
         }
@@ -70,10 +69,10 @@ class Calculator extends React.Component {
     render() {
         return (
             <div className={classes.container}>
-                <input type="text" id="display" autocomplete="off" className={classes.hidden} onChange={() => this.change()} onKeyUp={(event) => this.onEnter(event)}/>
+                <input type="text" id="display" autoComplete="off" className={classes.hidden} onChange={() => this.change()} onKeyUp={(event) => this.onEnter(event)}/>
                 <Display displayValue={this.state.displayValue} />
                 <div className={classes.buttonsContainer}>
-                    {buttons.map(button => (<div className={classes.button} 
+                    {buttons.map(button => (<div key={button.value} className={classes.button} 
                         style={{ backgroundColor: button.backgroundColor ? button.backgroundColor : 'rgb(43 41 41)' }}
                         onClick={() => this.keyBoardOperation(button.value)}
                         >

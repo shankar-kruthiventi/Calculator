@@ -1,30 +1,37 @@
 .container {
     width:25%;
-    height: 51.5%;
-    position: relative;
-    /* background: #131313; */
+    position: absolute;
+    top: 50%;
+    left:50%;
     background: rgb(43 41 41);
-    display:flex;
-    flex-direction: column;
+    transform: translate(-50%,-50%);
+    display: grid;
+    grid-template-rows:  0 300px 500px;
 }
 .buttonsContainer {
-    position: absolute;
-    bottom: 0;
-    right: 0;
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(7, 1fr);
 }
 .button {
-    width: 24.45%;
     text-align: center;
-    display: inline-block;
     color: #ffffff;
     padding: 10px 0 10px 0;
     border: 1px solid #cccccc;
 }
 
 .button:active {
-    zoom: 0.85;
+    zoom: 0.95;
 }
 
 .hidden {
-    z-index: -1;
+    /* z-index: -1; */
+    opacity: 0;
+}
+
+@media screen and (max-width:768px) {
+    .container {
+        width: 100%;
+        grid-template-rows:  0 180px 400px
+    }
 }

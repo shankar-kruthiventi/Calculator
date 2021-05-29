@@ -7,7 +7,6 @@ const performOperation = (value) => {
     try {
         result = evaluate(value);
     } catch(err) {
-        console.log(err);
         result = 'syntax error';
     } finally {
         return result; 
