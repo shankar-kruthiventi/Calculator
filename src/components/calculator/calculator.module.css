@@ -6,7 +6,8 @@
     background: rgb(43 41 41);
     transform: translate(-50%,-50%);
     display: grid;
-    grid-template-rows:  0 300px 500px;
+    /* grid-template-rows:  0 300px 500px; */
+    grid-template-rows:  0 200px 500px; 
 }
 .buttonsContainer {
     display:grid;
@@ -25,7 +26,6 @@
 }
 
 .hidden {
-    /* z-index: -1; */
     opacity: 0;
 }
 
