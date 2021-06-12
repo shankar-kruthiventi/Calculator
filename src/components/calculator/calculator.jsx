@@ -12,6 +12,7 @@ class Calculator extends React.Component {
         this.state = {
             displayValue: '',
             currentOperation: '',
+            previousOperation: '',
             operationHistory: [],
             timer: null
         }
@@ -86,20 +87,40 @@ class Calculator extends React.Component {
         } else if (key === 'undo') {
             this.undoKeyboardOperation()
         } else if (operations.specialOperands.indexOf(key) === -1) {
-            document.getElementById('display').value = display + key;
-            this.change();
+            if(this.state.previousOperation === '=') {
+                document.getElementById('display').value = key;
+                this.change();
+            } else {
+                document.getElementById('display').value = display + key;
+                this.change();
+            }          
         } else {
             if (key === 'CE') {
                 let operationHistory = [];
+                document.getElementById('display').value = '';
                 this.setState(state => { return { ...state, operationHistory, currentOperation: '' } });
             }
             if (key === 'C' && this.state.displayValue.length === 0) {
                 this.setState(state => { return { ...state, currentOperation: '' } });
+            } else if(key === 'C' && display.toString().split(':').includes('SyntaxError')) {
+                display =  '';
+                let operation = this.state.operationHistory.pop();
+                document.getElementById('display').value = operation;
+                this.setState(state => { return {...state, displayValue: operation, currentOperation: operation} })
+            } else if(key === 'C') {
+                let result = display.slice(0, display.length - 1);
+                document.getElementById('display').value = result;
+                this.setState(state => { return {...state, displayValue: result} });
+            } else {
+                let result = operations.specialOperations(display, key)
+
+                document.getElementById('display').value = document.getElementById('display').value + result;
+                this.setState(state => { return { ...state, displayValue: result } });
             }
-            let result = operations.specialOperations(display, key)
-            document.getElementById('display').value = result;
-            this.setState(state => { return { ...state, displayValue: result } });
+
+            
         }
+        this.setState(state => { return {...state, previousOperation: key}});
     }
 
     render() {
