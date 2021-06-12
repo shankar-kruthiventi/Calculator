@@ -13,8 +13,8 @@ const performOperation = (value) => {
             value = value.split('');
             value.splice(index, 1,'*(1/100)*');
             value = value.join('');
-            result = Math.floor(evaluate(value));
-            return result;
+            /* result = Math.floor(evaluate(value));
+            return result; */
         }   
         result = evaluate(value);
     } catch(err) {
